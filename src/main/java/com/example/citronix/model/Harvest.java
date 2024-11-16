@@ -25,7 +25,7 @@ public class Harvest {
     private UUID uuid;
 
     private LocalDate harvestDate;
-    private double totalQuantity; // in kg
+    private double totalQuantity;
 
     @Enumerated(EnumType.STRING)
     private Season season;
