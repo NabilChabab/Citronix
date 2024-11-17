@@ -21,7 +21,7 @@ public class SaleController {
         this.saleService = saleService;
     }
 
-    @PostMapping
+    @PostMapping("/save")
     public ResponseEntity<SaleDTO> createSale(@RequestBody Sale sale) {
         SaleDTO createdSale = saleService.save(sale);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdSale);
