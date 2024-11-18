@@ -1,5 +1,7 @@
 package com.example.citronix.services.impl;
 
+import com.example.citronix.exceptions.FarmExistsException;
+import com.example.citronix.exceptions.FarmNotFoundException;
 import com.example.citronix.model.Farm;
 import com.example.citronix.repository.FarmRepository;
 import com.example.citronix.services.FarmSearchService;
@@ -29,7 +31,7 @@ public class FarmServiceImpl implements FarmService {
     public Farm save(Farm farm) {
         Optional<Farm> farmOptional = farmRepository.findByName(farm.getName());
         if (farmOptional.isPresent()) {
-            throw new RuntimeException("Farm already exists");
+            throw new FarmExistsException("Farm already exists");
         }
 
         return farmRepository.save(farm);
@@ -37,7 +39,7 @@ public class FarmServiceImpl implements FarmService {
 
     @Override
     public Farm update(UUID uuid ,Farm farm) {
-        Farm farm1 = farmRepository.findById(uuid).orElseThrow(()->new RuntimeException("Farm not found"));
+        Farm farm1 = farmRepository.findById(uuid).orElseThrow(()->new FarmNotFoundException("Farm not found"));
         farm1.setName(farm.getName());
         farm1.setLocation(farm.getLocation());
         farm1.setCreationDate(farm.getCreationDate());
@@ -47,7 +49,7 @@ public class FarmServiceImpl implements FarmService {
 
     @Override
     public Farm findById(UUID uuid) {
-        return farmRepository.findById(uuid).orElseThrow(()->new RuntimeException("Farm not found"));
+        return farmRepository.findById(uuid).orElseThrow(()->new FarmNotFoundException("Farm not found"));
     }
 
     @Override
@@ -57,7 +59,7 @@ public class FarmServiceImpl implements FarmService {
 
     @Override
     public void delete(UUID farmId) {
-        Farm farm = farmRepository.findById(farmId).orElseThrow(() -> new RuntimeException("Farm not found"));
+        Farm farm = farmRepository.findById(farmId).orElseThrow(() -> new FarmNotFoundException("Farm not found"));
         farmRepository.delete(farm);
     }
 
