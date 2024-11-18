@@ -1,5 +1,8 @@
 package com.example.citronix.services.impl;
 
+import com.example.citronix.exceptions.FieldAreaException;
+import com.example.citronix.exceptions.FieldNotFoundException;
+import com.example.citronix.exceptions.HarvestPlantingException;
 import com.example.citronix.model.Field;
 import com.example.citronix.model.Tree;
 import com.example.citronix.repository.FieldRepository;
@@ -26,16 +29,16 @@ public class TreeServiceImpl implements TreeService {
     @Override
     public Tree save(UUID fieldUuid, Tree tree) {
         Field field = fieldRepository.findById(fieldUuid)
-            .orElseThrow(() -> new IllegalArgumentException("Field not found"));
+            .orElseThrow(() -> new FieldNotFoundException("Field not found"));
 
         if (!tree.isPlantingSeason()) {
-            throw new IllegalArgumentException("Trees can only be planted between March and May.");
+            throw new HarvestPlantingException("Trees can only be planted between March and May.");
         }
 
         double maxTrees = field.getArea() * 100;
         long currentTreeCount = treeRepository.countByFieldUuid(fieldUuid);
         if (currentTreeCount >= maxTrees) {
-            throw new IllegalArgumentException("Field has reached the maximum tree density.");
+            throw new FieldAreaException("Field has reached the maximum tree density.");
         }
 
         tree.setField(field);
