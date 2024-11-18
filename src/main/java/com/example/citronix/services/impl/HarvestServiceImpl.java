@@ -1,5 +1,6 @@
 package com.example.citronix.services.impl;
 
+import com.example.citronix.exceptions.*;
 import com.example.citronix.model.Harvest;
 import com.example.citronix.model.HarvestDetail;
 import com.example.citronix.model.Tree;
@@ -39,9 +40,9 @@ public class HarvestServiceImpl implements HarvestService {
     @Override
     public HarvestDetail saveHarvestDetail(UUID harvestId, UUID treeId, double quantity) {
         Harvest harvest = harvestRepository.findById(harvestId)
-            .orElseThrow(() -> new IllegalArgumentException("Harvest not found"));
+            .orElseThrow(() -> new HarvestNotFoundException("Harvest not found"));
         Tree tree = treeRepository.findById(treeId)
-            .orElseThrow(() -> new IllegalArgumentException("Tree not found"));
+            .orElseThrow(() -> new TreeNotFoundException("Tree not found"));
 
         validateUniqueHarvestForSeason(harvest.getSeason(), tree.getField().getUuid());
         validateTreeNotAlreadyHarvested(tree, harvest.getSeason());
@@ -56,21 +57,21 @@ public class HarvestServiceImpl implements HarvestService {
     private void validateUniqueHarvestForSeason(Season season, UUID fieldUuid) {
         boolean exists = harvestRepository.existsBySeasonAndHarvestDetails_Tree_Field_Uuid(season, fieldUuid);
         if (exists) {
-            throw new IllegalArgumentException("A harvest already exists for this season and field");
+            throw new HarvestExistsForSeasonException("A harvest already exists for this season and field");
         }
     }
 
     private void validateTreeNotAlreadyHarvested(Tree tree, Season season) {
         boolean exists = harvestDetailRepository.existsByTreeAndHarvest_Season(tree, season);
         if (exists) {
-            throw new IllegalArgumentException("Tree already harvested for this season");
+            throw new TreeHarvestedForSeason("Tree already harvested for this season");
         }
     }
 
     private void validateHarvestPeriod(LocalDate date) {
         Month month = date.getMonth();
         if (!(month == Month.MARCH || month == Month.APRIL || month == Month.MAY)) {
-            throw new IllegalArgumentException("Harvests can only occur in March, April, or May");
+            throw new HarvestPlantingException("Harvests can only occur in March, April, or May");
         }
     }
 }
