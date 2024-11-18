@@ -14,9 +14,4 @@ public interface FarmRepository extends JpaRepository<Farm , UUID> {
 
     Optional<Farm> findByName(String name);
     Page<Farm> findAll(Pageable pageable);
-
-    List<Farm> findByLocation(String location);
-
-    @Query("SELECT f FROM Farm f WHERE f.totalArea >= :minArea")
-    List<Farm> findByMinimumArea(double minArea);
 }
