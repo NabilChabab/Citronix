@@ -1,5 +1,6 @@
 package com.example.citronix.services.impl;
 
+import com.example.citronix.exceptions.InvalidUuidException;
 import com.example.citronix.model.Harvest;
 import com.example.citronix.model.Sale;
 import com.example.citronix.repository.HarvestRepository;
@@ -23,7 +24,7 @@ public class SaleServiceImpl implements SaleService {
     @Override
     public SaleDTO save(Sale sale) {
         Harvest harvest = harvestRepository.findById(sale.getHarvest().getUuid())
-            .orElseThrow(() -> new IllegalArgumentException("Invalid harvest UUID"));
+            .orElseThrow(() -> new InvalidUuidException("Invalid harvest UUID"));
 
         double revenue = harvest.getTotalQuantity() * sale.getUnitPrice();
 
