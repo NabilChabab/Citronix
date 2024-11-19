@@ -25,8 +25,8 @@ public class Tree {
 
     private LocalDate plantingDate;
 
-    @ManyToOne
-    @JoinColumn(name = "field_uuid")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "field_uuid", referencedColumnName = "uuid")
     private Field field;
 
     @OneToMany(mappedBy = "tree")
