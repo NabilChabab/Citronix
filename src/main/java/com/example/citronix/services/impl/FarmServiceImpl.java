@@ -3,6 +3,7 @@ package com.example.citronix.services.impl;
 import com.example.citronix.exceptions.FarmExistsException;
 import com.example.citronix.exceptions.FarmNotFoundException;
 import com.example.citronix.model.Farm;
+import com.example.citronix.model.Field;
 import com.example.citronix.repository.FarmRepository;
 import com.example.citronix.services.FarmSearchService;
 import com.example.citronix.services.FarmService;
@@ -16,7 +17,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 
-@Service
+@Service("farmServiceImpl1")
 public class FarmServiceImpl implements FarmService {
 
     private final FarmRepository farmRepository;
@@ -33,7 +34,6 @@ public class FarmServiceImpl implements FarmService {
         if (farmOptional.isPresent()) {
             throw new FarmExistsException("Farm already exists");
         }
-
         return farmRepository.save(farm);
     }
 
@@ -66,6 +66,14 @@ public class FarmServiceImpl implements FarmService {
     @Override
     public List<SearchDTO> findByCriteria(SearchDTO searchDTO) {
         return farmSearchService.findByCriteria(searchDTO);
+    }
+
+    @Override
+    public List<Farm> findFarmsWithFieldAreaLessThan() {
+        List<Farm> farms = farmRepository.findAll();
+        return farms.stream()
+            .filter(farm -> farm.getFields().stream().mapToDouble(Field::getArea).sum() < 4000)
+            .toList();
     }
 
 }

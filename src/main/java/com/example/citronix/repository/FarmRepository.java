@@ -14,4 +14,7 @@ public interface FarmRepository extends JpaRepository<Farm , UUID> {
 
     Optional<Farm> findByName(String name);
     Page<Farm> findAll(Pageable pageable);
+
+    @Query("SELECT f FROM Farm f JOIN f.fields fi GROUP BY f HAVING SUM(fi.area) < 4000")
+    List<Farm> findFarmsWithFieldAreaLessThan();
 }
