@@ -9,6 +9,7 @@ import com.example.citronix.web.vm.farm.FarmVM;
 import com.example.citronix.web.vm.mapper.FarmMapper;
 import com.example.citronix.web.vm.search.FarmSearchVM;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -25,10 +26,11 @@ import java.util.UUID;
 public class FarmController {
 
 
+
     private final FarmService farmService;
     private final FarmMapper farmMapper;
 
-    public FarmController(FarmService farmService, FarmMapper farmMapper) {
+    public FarmController(@Qualifier("farmServiceImpl2") FarmService farmService, FarmMapper farmMapper) {
         this.farmService = farmService;
         this.farmMapper = farmMapper;
     }
@@ -87,5 +89,14 @@ public class FarmController {
         SearchDTO searchDTO = new SearchDTO(name, location, creationDateParsed);
         List<SearchDTO> farms = farmService.findByCriteria(searchDTO);
         return ResponseEntity.ok(farms);
+    }
+
+    @GetMapping("/field-area-less-than")
+    public ResponseEntity<List<FarmResponseVM>> getFarmsWithFieldAreaLessThan() {
+        List<Farm> farms = farmService.findFarmsWithFieldAreaLessThan();
+        List<FarmResponseVM> farmResponseVMs = farms.stream()
+            .map(farmMapper::toResponseVM)
+            .toList();
+        return new ResponseEntity<>(farmResponseVMs, HttpStatus.OK);
     }
 }
