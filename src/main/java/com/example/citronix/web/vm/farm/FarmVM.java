@@ -30,4 +30,6 @@ public class FarmVM {
     @NotNull(message = "Creation date is required.")
     private LocalDate creationDate;
 
+    private List<@Valid FieldVM> fields;
+
 }

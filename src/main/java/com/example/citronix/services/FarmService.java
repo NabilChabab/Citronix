@@ -4,10 +4,13 @@ import com.example.citronix.model.Farm;
 import com.example.citronix.services.dto.SearchDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
+
+@Service
 public interface FarmService {
 
 
@@ -18,4 +21,6 @@ public interface FarmService {
     void delete(UUID farmId);
 
     List<SearchDTO> findByCriteria(SearchDTO searchDTO);
+
+    List<Farm> findFarmsWithFieldAreaLessThan();
 }
