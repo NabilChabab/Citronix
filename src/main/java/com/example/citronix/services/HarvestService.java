@@ -8,5 +8,4 @@ import java.util.UUID;
 public interface HarvestService {
 
     Harvest save(Harvest harvest);
-    HarvestDetail saveHarvestDetail(UUID harvestId, UUID treeId, double quantity);
 }

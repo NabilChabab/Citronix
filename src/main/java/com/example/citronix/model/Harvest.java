@@ -35,4 +35,6 @@ public class Harvest {
 
     @OneToMany(mappedBy = "harvest")
     private List<Sale> sales;
+
+
 }
