@@ -29,7 +29,7 @@ public class HarvestDetail {
     @JoinColumn(name = "harvest_uuid")
     private Harvest harvest;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tree_uuid")
     private Tree tree;
 
