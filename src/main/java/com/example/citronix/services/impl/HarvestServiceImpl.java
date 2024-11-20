@@ -35,19 +35,17 @@ public class HarvestServiceImpl implements HarvestService {
 
     @Override
     public Harvest save(Harvest harvest) {
-        // Validate the harvest date
+
         validateHarvestPeriod(harvest.getHarvestDate());
 
-        // Validate and retrieve the field UUID
         if (harvest.getHarvestDetails() == null || harvest.getHarvestDetails().isEmpty()) {
             throw new IllegalArgumentException("Harvest must include at least one harvest detail with a tree UUID.");
         }
 
-        // Fetch the first tree from the harvest details
+
         HarvestDetail firstHarvestDetail = harvest.getHarvestDetails().get(0);
         UUID treeUuid = firstHarvestDetail.getTree().getUuid();
 
-        // Fetch the Tree with the Field
         Tree tree = treeRepository.findByUuidWithField(treeUuid)
             .orElseThrow(() -> new IllegalArgumentException("Tree not found or not associated with any field"));
 
@@ -57,26 +55,21 @@ public class HarvestServiceImpl implements HarvestService {
 
         UUID fieldUuid = tree.getField().getUuid();
 
-        // Validate unique harvest for the season and field
         validateUniqueHarvestForSeason(harvest.getSeason(), fieldUuid);
         validateTreeNotAlreadyHarvested(tree, harvest.getSeason());
 
-        // Fetch all trees in the field
         List<Tree> trees = treeRepository.findAllByFieldUuid(fieldUuid);
 
         if (trees.isEmpty()) {
             throw new IllegalStateException("No trees found in the specified field.");
         }
 
-        // Generate HarvestDetails for all trees in the field
         List<HarvestDetail> harvestDetails = trees.stream()
             .map(currentTree -> createHarvestDetail(harvest, currentTree))
             .collect(Collectors.toList());
 
-        // Set the generated HarvestDetails to the Harvest
         harvest.setHarvestDetails(harvestDetails);
 
-        // Save the Harvest along with HarvestDetails (cascade save due to @OneToMany relationship)
         return harvestRepository.save(harvest);
     }
 

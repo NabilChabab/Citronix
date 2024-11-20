@@ -2,6 +2,7 @@ package com.example.citronix.services.impl;
 
 import com.example.citronix.exceptions.FarmExistsException;
 import com.example.citronix.exceptions.FarmNotFoundException;
+import com.example.citronix.exceptions.FieldNotFoundException;
 import com.example.citronix.model.Farm;
 import com.example.citronix.model.Field;
 import com.example.citronix.repository.FarmRepository;
@@ -17,7 +18,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 
-@Service("farmServiceImpl1")
+@Service
 public class FarmServiceImpl implements FarmService {
 
     private final FarmRepository farmRepository;
@@ -33,6 +34,14 @@ public class FarmServiceImpl implements FarmService {
         Optional<Farm> farmOptional = farmRepository.findByName(farm.getName());
         if (farmOptional.isPresent()) {
             throw new FarmExistsException("Farm already exists");
+        }
+        if (farm.getFields() != null){
+            for (Field field : farm.getFields()){
+                field.setFarm(farm);
+            }
+        }
+        else {
+            throw new FieldNotFoundException("Fields are required");
         }
         return farmRepository.save(farm);
     }
