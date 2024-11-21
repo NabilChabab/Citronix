@@ -6,6 +6,7 @@ import com.example.citronix.services.HarvestService;
 import com.example.citronix.web.vm.harvest.HarvestResponseVM;
 import com.example.citronix.web.vm.harvest.HarvestVM;
 import com.example.citronix.web.vm.mapper.HarvestMapper;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,10 +27,13 @@ public class HarvestController {
     }
 
 
-    @PostMapping("/save")
-    public ResponseEntity<HarvestResponseVM> save(@RequestBody Harvest harvest) {
-        Harvest createdHarvest = harvestService.save(harvest);
+    @PostMapping("{fieldUuid}/save")
+    public ResponseEntity<HarvestResponseVM> createHarvest(
+        @PathVariable UUID fieldUuid,
+        @Valid @RequestBody HarvestVM harvestVM) {
+        Harvest harvest = harvestMapper.toEntity(harvestVM);
+        Harvest createdHarvest = harvestService.save(harvest , fieldUuid);
         HarvestResponseVM responseVM = harvestMapper.toResponseVM(createdHarvest);
-        return ResponseEntity.ok(responseVM);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseVM);
     }
 }
