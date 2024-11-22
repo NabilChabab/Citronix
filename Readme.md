@@ -54,4 +54,4 @@ Conception :
 
 Jira Board && PPT Presentation :
 Jira -> https://chababnabil.atlassian.net/jira/software/projects/CIT/boards/36?atlOrigin=eyJpIjoiYTAxYTY5YzVkNzEyNGQ2OGIxNzE5MjA1YzlhN2Q2ZjgiLCJwIjoiaiJ9
-PPT Canva -> https://www.canva.com/design/DAGRqm-ZUnU/0Xwg7Y1Biu6PqErnew-Nyg/edit?utm_content=DAGRqm-ZUnU&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
+PPT Canva -> https://www.canva.com/design/DAGVuv1Ayjo/Yb04_HXka03-VDUURlLmzQ/edit?utm_content=DAGVuv1Ayjo&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
