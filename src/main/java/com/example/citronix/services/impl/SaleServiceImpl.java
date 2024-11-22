@@ -26,6 +26,10 @@ public class SaleServiceImpl implements SaleService {
         Harvest harvest = harvestRepository.findById(sale.getHarvest().getUuid())
             .orElseThrow(() -> new InvalidUuidException("Invalid harvest UUID"));
 
+        if (sale.getSaleDate().isBefore(harvest.getHarvestDate())) {
+            throw new RuntimeException("Sale date must be after harvest date");
+        }
+
         double revenue = harvest.getTotalQuantity() * sale.getUnitPrice();
 
         SaleDTO saleDTO = new SaleDTO(
